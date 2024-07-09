@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { paymentMethods, SubscriptionSuggestion, subscriptionSuggestions, PaymentMethod, Subscription } from '../types';
+import { SubscriptionSuggestion, subscriptionSuggestions, PaymentMethod, Subscription } from '../types';
 
 interface Props {
     addSubscription: (subscription: Subscription) => void;
@@ -119,15 +119,36 @@ function SubscriptionForm({ addSubscription, availablePaymentMethods }: Props) {
                 />
             </div>
             <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">支払い日</label>
-                <input
-                    type="number"
-                    min="1"
-                    max="31"
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {billingCycle === 'monthly' ? '支払い日' : '支払い月'}
+                </label>
+                <select
                     value={paymentDate}
                     onChange={(e) => setPaymentDate(Number(e.target.value))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                />
+                >
+                    {billingCycle === 'monthly'
+                        ? Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                            <option key={day} value={day}>{day}日</option>
+                        ))
+                        : [
+                            { value: 1, label: '1月' },
+                            { value: 2, label: '2月' },
+                            { value: 3, label: '3月' },
+                            { value: 4, label: '4月' },
+                            { value: 5, label: '5月' },
+                            { value: 6, label: '6月' },
+                            { value: 7, label: '7月' },
+                            { value: 8, label: '8月' },
+                            { value: 9, label: '9月' },
+                            { value: 10, label: '10月' },
+                            { value: 11, label: '11月' },
+                            { value: 12, label: '12月' }
+                        ].map(month => (
+                            <option key={month.value} value={month.value}>{month.label}</option>
+                        ))
+                    }
+                </select>
             </div>
             <div className="mb-4">
                 <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">支払い方法</label>

@@ -49,7 +49,7 @@ function SubscriptionList({ subscriptions, deleteSubscription }: Props) {
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
                     <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full">
                         <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">詳細</h3>
-                        <img src={selectedSubscription.image} alt={selectedSubscription.name} className="w-full h-40 object-cover rounded-md mb-4" />
+                        {selectedSubscription.image && <img src={selectedSubscription.image} alt={selectedSubscription.name} className="w-full h-40 object-cover rounded-md mb-4" />}
                         <p className="mb-2"><span className="font-medium">名前:</span> {selectedSubscription.name}</p>
                         <p className="mb-2"><span className="font-medium">価格:</span> ¥{selectedSubscription.price}</p>
                         <p className="mb-4"><span className="font-medium">説明:</span> {selectedSubscription.description}</p>

@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
     localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
-  }, [subscriptions]);
+  }, [subscriptions, paymentMethods]);
 
   const addSubscription = (subscription: Subscription) => {
     setSubscriptions([...subscriptions, subscription]);
@@ -48,7 +48,7 @@ function App() {
                 />
                 <SubscriptionList subscriptions={subscriptions} deleteSubscription={deleteSubscription} />
               </div>
-              <PaymentSchedule subscriptions={subscriptions} />
+              <PaymentSchedule subscriptions={subscriptions} paymentMethods={paymentMethods} />
             </>
           } />
           <Route path="/mypage" element={<MyPage />} />

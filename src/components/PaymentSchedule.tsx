@@ -1,12 +1,12 @@
-// PaymentSchedule.tsx
 import React from 'react';
-import { Subscription, PaymentMethod, paymentMethods } from '../types';
+import { Subscription, PaymentMethod } from '../types';
 
 interface Props {
     subscriptions: Subscription[];
+    paymentMethods: PaymentMethod[];
 }
 
-function PaymentSchedule({ subscriptions }: Props) {
+function PaymentSchedule({ subscriptions, paymentMethods }: Props) {
     const sortedSubscriptions = [...subscriptions].sort((a, b) => a.paymentDate - b.paymentDate);
 
     const getPaymentMethod = (id: number): PaymentMethod | undefined => {
@@ -15,29 +15,25 @@ function PaymentSchedule({ subscriptions }: Props) {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h2 className="text-2xl font-bold mb-4">支払いスケジュール</h2>
-            <table className="w-full border-collapse">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border p-2">支払い日</th>
-                        <th className="border p-2">サブスク名</th>
-                        <th className="border p-2">金額</th>
-                        <th className="border p-2">支払い方法</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sortedSubscriptions.map((sub) => (
-                        <tr key={sub.id}>
-                            <td className="border p-2">{sub.paymentDate}日</td>
-                            <td className="border p-2">{sub.name}</td>
-                            <td className="border p-2">
-                                ¥{sub.price.toFixed(2)} / {sub.billingCycle === 'monthly' ? '月' : '年'}
-                            </td>
-                            <td className="border p-2">{getPaymentMethod(sub.paymentMethodId)?.name || '不明'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">支払いスケジュール</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {sortedSubscriptions.map((sub) => (
+                    <div key={sub.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div className="px-6 py-4">
+                            <div className="font-bold text-xl mb-2 text-gray-800 dark:text-white">{sub.name}</div>
+                            <p className="text-gray-700 dark:text-gray-300 text-base">
+                                <span className="font-semibold">支払い日:</span> {sub.billingCycle === 'monthly' ? '毎月' : '毎年'}{sub.paymentDate}{sub.billingCycle === 'monthly' ? '日' : '月'}
+                            </p>
+                            <p className="text-gray-700 dark:text-gray-300 text-base">
+                                <span className="font-semibold">金額:</span> ¥{sub.price.toFixed(2)} / {sub.billingCycle === 'monthly' ? '月' : '年'}
+                            </p>
+                            <p className="text-gray-700 dark:text-gray-300 text-base">
+                                <span className="font-semibold">支払い方法:</span> {getPaymentMethod(sub.paymentMethodId)?.name || '不明'}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
