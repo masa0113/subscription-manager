@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import SubscriptionList from './components/SubscriptionList';
 import SubscriptionForm from './components/SubscriptionForm';
-import Settings from './components/Settings';
+import MyPage from './components/MyPage';
+import TotalCost from './components/TotalCost';
 import { Subscription } from './types';
 
 function App() {
@@ -9,19 +11,10 @@ function App() {
     const savedSubscriptions = localStorage.getItem('subscriptions');
     return savedSubscriptions ? JSON.parse(savedSubscriptions) : [];
   });
-  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
   }, [subscriptions]);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   const addSubscription = (subscription: Subscription) => {
     setSubscriptions([...subscriptions, subscription]);
@@ -32,16 +25,29 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900' : 'bg-gray-100'}`}>
+    <Router>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">サブスク管理アプリ</h1>
-        <Settings darkMode={darkMode} setDarkMode={setDarkMode} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <SubscriptionForm addSubscription={addSubscription} />
-          <SubscriptionList subscriptions={subscriptions} deleteSubscription={deleteSubscription} />
-        </div>
+        <nav className="mb-8">
+          <ul className="flex space-x-4">
+            <li><Link to="/" className="text-blue-500 hover:text-blue-700">Home</Link></li>
+            <li><Link to="/mypage" className="text-blue-500 hover:text-blue-700">マイページ</Link></li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">サブスク管理アプリ</h1>
+              <TotalCost subscriptions={subscriptions} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <SubscriptionForm addSubscription={addSubscription} />
+                <SubscriptionList subscriptions={subscriptions} deleteSubscription={deleteSubscription} />
+              </div>
+            </>
+          } />
+          <Route path="/mypage" element={<MyPage />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
