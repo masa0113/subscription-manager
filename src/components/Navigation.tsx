@@ -6,6 +6,7 @@ export const Navigation = () => {
     const navItems = [
         { path: '/', label: 'ホーム' },
         { path: '/mypage', label: 'マイページ' },
+        { path: '/payment-methods', label: '支払い方法' },
     ];
 
     return (

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Subscription, SubscriptionSuggestion, subscriptionSuggestions } from '../types';
+import { paymentMethods, SubscriptionSuggestion, subscriptionSuggestions, PaymentMethod, Subscription } from '../types';
 
 interface Props {
     addSubscription: (subscription: Subscription) => void;
+    availablePaymentMethods: PaymentMethod[]; // 利用可能な支払い方法のリスト
 }
 
-function SubscriptionForm({ addSubscription }: Props) {
+function SubscriptionForm({ addSubscription, availablePaymentMethods }: Props) {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
+    const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+    const [paymentDate, setPaymentDate] = useState(1);
+    const [paymentMethodId, setPaymentMethodId] = useState(availablePaymentMethods[0]?.id || 0);
     const [suggestions, setSuggestions] = useState<SubscriptionSuggestion[]>([]);
 
     useEffect(() => {
@@ -30,13 +34,19 @@ function SubscriptionForm({ addSubscription }: Props) {
             name,
             price: Number(price),
             description,
-            image
+            image,
+            billingCycle,
+            paymentDate,
+            paymentMethodId
         };
         addSubscription(newSubscription);
         setName('');
         setPrice('');
         setDescription('');
         setImage('');
+        setBillingCycle('monthly');
+        setPaymentDate(1);
+        setPaymentMethodId(1);
     };
 
     const handleSuggestionClick = (suggestion: SubscriptionSuggestion) => {
@@ -82,6 +92,16 @@ function SubscriptionForm({ addSubscription }: Props) {
                 />
             </div>
             <div className="mb-4">
+                <select
+                    value={billingCycle}
+                    onChange={(e) => setBillingCycle(e.target.value as 'monthly' | 'yearly')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                >
+                    <option value="monthly">月額</option>
+                    <option value="yearly">年額</option>
+                </select>
+            </div>
+            <div className="mb-4">
                 <textarea
                     placeholder="説明"
                     value={description}
@@ -97,6 +117,31 @@ function SubscriptionForm({ addSubscription }: Props) {
                     onChange={(e) => setImage(e.target.value)}
                     className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600"
                 />
+            </div>
+            <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">支払い日</label>
+                <input
+                    type="number"
+                    min="1"
+                    max="31"
+                    value={paymentDate}
+                    onChange={(e) => setPaymentDate(Number(e.target.value))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">支払い方法</label>
+                <select
+                    value={paymentMethodId}
+                    onChange={(e) => setPaymentMethodId(Number(e.target.value))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                >
+                    {availablePaymentMethods.map((method) => (
+                        <option key={method.id} value={method.id}>
+                            {method.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <button
                 type="submit"

@@ -6,8 +6,13 @@ interface Props {
 }
 
 const TotalCost: React.FC<Props> = ({ subscriptions }) => {
-    const monthlyTotal = subscriptions.reduce((total, sub) => total + sub.price, 0);
-    const yearlyTotal = monthlyTotal * 12;
+    const monthlyTotal = subscriptions.reduce((total, sub) => {
+        return total + (sub.billingCycle === 'monthly' ? sub.price : sub.price / 12);
+    }, 0);
+
+    const yearlyTotal = subscriptions.reduce((total, sub) => {
+        return total + (sub.billingCycle === 'yearly' ? sub.price : sub.price * 12);
+    }, 0);
 
     return (
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
