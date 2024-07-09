@@ -5,8 +5,15 @@ import Settings from './components/Settings';
 import { Subscription } from './types';
 
 function App() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => {
+    const savedSubscriptions = localStorage.getItem('subscriptions');
+    return savedSubscriptions ? JSON.parse(savedSubscriptions) : [];
+  });
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+  }, [subscriptions]);
 
   useEffect(() => {
     if (darkMode) {
