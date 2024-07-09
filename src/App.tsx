@@ -5,6 +5,7 @@ import SubscriptionForm from './components/SubscriptionForm';
 import MyPage from './components/MyPage';
 import TotalCost from './components/TotalCost';
 import { Subscription } from './types';
+import { Navigation } from './components/Navigation';
 
 function App() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => {
@@ -27,12 +28,7 @@ function App() {
   return (
     <Router>
       <div className="container mx-auto px-4 py-8">
-        <nav className="mb-8">
-          <ul className="flex space-x-4">
-            <li><Link to="/" className="text-blue-500 hover:text-blue-700">Home</Link></li>
-            <li><Link to="/mypage" className="text-blue-500 hover:text-blue-700">マイページ</Link></li>
-          </ul>
-        </nav>
+        <Navigation />
         <Routes>
           <Route path="/" element={
             <>

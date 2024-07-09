@@ -12,8 +12,8 @@ const TotalCost: React.FC<Props> = ({ subscriptions }) => {
     return (
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700 dark:text-white">合計コスト</h2>
-            <p className="text-lg mb-2">月額: ¥{monthlyTotal.toLocaleString()}</p>
-            <p className="text-lg">年額: ¥{yearlyTotal.toLocaleString()}</p>
+            <p className="text-lg mb-2 dark:text-whit">月額: ¥{monthlyTotal.toLocaleString()}</p>
+            <p className="text-lg dark:text-whit">年額: ¥{yearlyTotal.toLocaleString()}</p>
         </div>
     );
 };
