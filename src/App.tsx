@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import SubscriptionList from './components/SubscriptionList';
 import SubscriptionForm from './components/SubscriptionForm';
 import MyPage from './components/MyPage';
